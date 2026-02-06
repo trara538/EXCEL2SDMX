@@ -1,9 +1,9 @@
 
 # Transforming Excel tables into SDMX tables
 
-The goal of IMTS2SDMX package is to allow users to be able to generate International Merchandise Trade (IMTS) SDMX files out from published IMTS excel files. 
+The goal of EXCELSDMX package is to allow users to be able to generate SDMX files out from published excel statistical tables files. 
 
-Before using the IMTS2SDMX R package, you will need to reorganize your IMTS published tables as follows:
+Before using the EXCEL2SDMX R package, you will need to reorganize your published tables as follows:
 
 1. Create an excel file
 2. Add the necessary worksheets in the excel file:
