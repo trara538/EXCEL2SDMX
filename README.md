@@ -33,7 +33,7 @@ This is a basic example which shows you how to organize your imts excel workshee
 
 ### Visitor arrivals excel to SDMX conversion
 
-## Installation
+## Installation of EXCEL2SDMX package
 
 You can install and execute the EXCEL2SDMX package as per the following steps:
 
