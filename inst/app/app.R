@@ -37,7 +37,25 @@ allowed_sheets <- c(
 ui <- secure_app(
   dashboardPage(
 
-    dashboardHeader(title = "SDMX Converter"),
+    dashboardHeader(
+      title = tags$span(
+        tags$img(
+          src = "logo.png",
+          height = "40px",
+          style = "
+        margin-right:10px;
+        padding:0;
+        display:inline-block;
+        vertical-align:middle;
+      "
+        ),
+        tags$span(
+          "XLS to SDMX",
+          style = "vertical-align:middle;"
+        )
+      )
+    ),
+
 
     dashboardSidebar(
       sidebarMenu(
