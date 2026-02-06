@@ -9,7 +9,8 @@ Before using the IMTS2SDMX R package, you will need to reorganize your IMTS publ
 
 1. Create an excel file
 2. Add the following worksheets in the excel file:
-# Transforming IMTS tables into SDMX tables
+
+## Transforming IMTS tables into SDMX tables
 
 The goal of EXCEL2SDMX package is to allow users to be able to generate SDMX files out from published statistical excel files. 
 
@@ -37,7 +38,11 @@ The IMTS excel should be re-organised according steps:
 This is a basic example which shows you how to organize your imts excel worksheet tables:
 
 [Download sample IMTS file](https://github.com/trara538/EXCEL2SDMX/blob/main/inst/extdata/sample_IMTS.xlsx)
-    
+
+### CPI excel reorganisation
+
+### Visitor arrivals excel reorganisation
+   
 
 ## Installation
 
@@ -57,7 +62,3 @@ library(EXCEL2SDMX) # Load the EXCEL2SDMX package
 EXCEL2SDMX::run_app() # Execute the EXCEL2SDMX package 
 
 ```
-
-### CPI excel reorganisation
-
-### Visitor arrivals excel reorganisation
