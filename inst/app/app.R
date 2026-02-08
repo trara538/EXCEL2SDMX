@@ -28,7 +28,9 @@ allowed_sheets <- c(
   "totexports",
   "bot_cty",
   "trade_reg",
-  "mode_trspt"
+  "mode_trspt",
+  "x_sitc",
+  "m_sitc"
 )
 
 # -------------------------------------------------
@@ -231,6 +233,18 @@ server <- function(input, output, session) {
           )
 
         final_df <- bind_rows(final_df, table_long)
+      } else if (sheetname %in% c("x_sitc", "m_sitc")) {
+
+        table_long <- df |>
+          pivot_longer(
+            cols = -c(DATAFLOW:OBS_COMMENT),
+            names_to = "COMMODITY",
+            values_to = "OBS_VALUE"
+          ) |>
+          mutate(TIME_PERIOD = as.character(TIME_PERIOD))
+
+        final_df <- bind_rows(final_df, table_long)
+
       }
     }
 
