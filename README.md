@@ -8,7 +8,7 @@ Before using the EXCEL2SDMX R package, you will need to reorganize your publishe
 1. Create an excel file
 2. Add the necessary worksheets in the excel file:
 
-### IMTS excel to SDMX conversion
+### 1. IMTS excel to SDMX conversion
 
 The IMTS excel should be re-organised according steps: 
 
@@ -29,9 +29,9 @@ This is a basic example which shows you how to organize your imts excel workshee
 
 [Download sample IMTS file](https://github.com/trara538/EXCEL2SDMX/blob/main/inst/extdata/sample_IMTS.xlsx)
 
-### CPI excel to SDMX conversion
+### 2. CPI excel to SDMX conversion
 
-### Visitor arrivals excel to SDMX conversion
+### 3. Visitor arrivals excel to SDMX conversion
 
 ## Installation of EXCEL2SDMX package
 
