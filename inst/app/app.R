@@ -58,7 +58,6 @@ ui <- secure_app(
       )
     ),
 
-
     dashboardSidebar(
       sidebarMenu(
         menuItem("IMTS to SDMX", tabName = "imts", icon = icon("exchange-alt")),
