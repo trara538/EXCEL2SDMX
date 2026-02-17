@@ -6,7 +6,7 @@ library(shinydashboard)
 library(readxl)
 library(dplyr)
 library(tidyr)
-library(shinymanager)
+library(shinymanager) #main library used for this package
 
 # -------------------------------------------------
 # USER CREDENTIALS

@@ -33,21 +33,21 @@ This is a basic example which shows you how to organize your imts excel workshee
 
 ### 3. Visitor arrivals excel to SDMX conversion
 
-## Installation of EXCEL2SDMX package
+## Installation of sdd_excel2sdmx package
 
-You can install and execute the EXCEL2SDMX package as per the following steps:
+You can install and execute the sdd_excel2sdmx package as per the following steps:
 
 ``` r
 # **************** How to install the package from R console ******************** #
 
 install.packages("remotes") # Ensure remotes package is installed before proceeding
 library(remotes) # load the remotes package
-remotes::install_github("https://github.com/trara538/EXCEL2SDMX") # Install the EXCEL2SDMX package
-# if "remotes::install_github("https://github.com/trara538/EXCEL2SDMX")" does not work. try the following
-remotes::install_github("https://github.com/trara538/EXCEL2SDMX", force = TRUE)
+remotes::install_github("https://github.com/trara538/sdd_excel2sdmx") # Install the sdd_excel2sdmx package
+# if "remotes::install_github("https://github.com/trara538/sdd_excel2sdmx")" does not work. try the following
+remotes::install_github("https://github.com/trara538/sdd_excel2sdmx", force = TRUE)
 
 # **************** How to run the imtshiny app from R console ******************** #
-library(EXCEL2SDMX) # Load the EXCEL2SDMX package
-EXCEL2SDMX::run_app() # Execute the EXCEL2SDMX package 
+library(sdd_excel2sdmx) # Load the sdd_excel2sdmx package
+sdd_excel2sdmx::run_app() # Execute the sdd_excel2sdmx package 
 
 ```
