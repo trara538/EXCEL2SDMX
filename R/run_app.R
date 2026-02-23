@@ -4,7 +4,7 @@
 #'
 #' @export
 run_app <- function() {
-  app_dir <- system.file("app", package = "sdd_excel2sdmx")
+  app_dir <- system.file("app", package = "EXCEL2SDMX")
   if (app_dir == "") {
     stop("App directory not found")
   }
