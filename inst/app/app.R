@@ -6,16 +6,6 @@ library(shinydashboard)
 library(readxl)
 library(dplyr)
 library(tidyr)
-library(shinymanager) #main library used for this package
-
-# -------------------------------------------------
-# USER CREDENTIALS
-# -------------------------------------------------
-credentials <- data.frame(
-  user = c("user"),
-  password = c("password"),
-  stringsAsFactors = FALSE
-)
 
 # -------------------------------------------------
 # ALLOWED WORKSHEETS (IMTS)
@@ -34,11 +24,14 @@ allowed_sheets <- c(
 )
 
 # -------------------------------------------------
+# ALLOWED WORKSHEETS (CPI)
+# -------------------------------------------------
+cpi_sheets <- c("inflation", "index")
+
+# -------------------------------------------------
 # UI
 # -------------------------------------------------
-ui <- secure_app(
-  dashboardPage(
-
+ui <- dashboardPage(
     dashboardHeader(
       title = tags$span(
         tags$img(
@@ -97,8 +90,26 @@ ui <- secure_app(
         # ---------------- CPI TAB ----------------
         tabItem(
           tabName = "cpi",
-          h2("CPI to SDMX"),
-          p("CPI conversion logic to be added")
+          h2("CPI Excel to SDMX Converter"),
+
+          box(
+            width = 4,
+            fileInput(
+              "cpi_excel_file",
+              "Upload IMTS Excel file",
+              accept = ".xlsx"
+            ),
+            actionButton("cpi_process", "Process file"),
+            br(), br(),
+            downloadButton("cpi_download_csv", "Download SDMX CSV")
+          ),
+
+          box(
+            width = 8,
+            title = "Processing log",
+            verbatimTextOutput("log"),
+            tableOutput("preview")
+          )
         ),
 
         # ------------- VISITOR TAB ---------------
@@ -110,15 +121,11 @@ ui <- secure_app(
       )
     )
   )
-)
 
 # -------------------------------------------------
 # SERVER
 # -------------------------------------------------
 server <- function(input, output, session) {
-
-  # ---- Authentication ----
-  secure_server(check_credentials = check_credentials(credentials))
 
   log_messages <- reactiveVal("")
   final_data   <- reactiveVal(NULL)
@@ -266,6 +273,81 @@ server <- function(input, output, session) {
     add_log("Processing completed successfully ✔")
   })
 
+
+  # -------------------------------------------------
+  # PROCESS CPI FILE
+  # -------------------------------------------------
+  observeEvent(input$cpi_process, {
+
+    req(input$cpi_excel_file)
+
+    log_messages("")
+    add_log("Starting IMTS processing...")
+
+    filePath <- input$cpi_excel_file$datapath
+    wsheets  <- excel_sheets(filePath)
+
+    # ---- Validate worksheet names ----
+    invalid_sheets <- setdiff(wsheets, cpi_sheets)
+
+    if (length(invalid_sheets) > 0) {
+
+      msg <- paste(
+        "Unsupported worksheet(s):",
+        paste(invalid_sheets, collapse = ", "),
+        "\n\nAllowed worksheet names:",
+        paste(cpi_sheets, collapse = ", ")
+      )
+
+      showNotification(msg, type = "error", duration = NULL)
+      add_log("ERROR: Unsupported worksheet(s) detected")
+      add_log(msg)
+
+      return(NULL)  # ⛔ Stop safely
+    }
+
+    add_log(paste("Valid worksheets detected:", paste(wsheets, collapse = ", ")))
+
+    final_df <- data.frame()
+
+    for (sheetname in wsheets) {
+
+      df <- read_excel(filePath, sheet = sheetname)
+
+      if (sheetname %in% c("inflation", "index")) {
+
+        table_long <- df |>
+          pivot_longer(
+            cols = -c(DATAFLOW:OBS_COMMENT),
+            names_to = "TIME_PERIOD",
+            values_to = "OBS_VALUE"
+          ) |>
+          mutate(TIME_PERIOD = as.character(TIME_PERIOD))
+
+        final_df <- bind_rows(final_df, table_long)
+    }
+    }
+
+    # ---- Final cleaning ----
+    final_df <- final_df |>
+      filter(!is.na(OBS_VALUE))
+
+    final_df[is.na(final_df)] <- ""
+
+    final_df <- final_df |>
+      mutate(OBS_VALUE = round(as.numeric(OBS_VALUE), 2)) |>
+      select(
+        DATAFLOW, FREQ, TIME_PERIOD, GEO_PICT, INDICATOR,
+        COMMODITY, OBS_VALUE, UNIT_MEASURE, UNIT_MULT, OBS_STATUS,
+        BASE_PER, OBS_COMMENT
+      )
+
+    final_data(final_df)
+    add_log("Processing completed successfully ✔")
+  })
+
+
+
   # -------------------------------------------------
   # OUTPUTS
   # -------------------------------------------------
@@ -278,12 +360,23 @@ server <- function(input, output, session) {
     log_messages()
   })
 
+  # Download IMTS csv file
   output$download_csv <- downloadHandler(
     filename = function() paste0("IMTS_sdmx_data_", Sys.Date(), ".csv"),
     content  = function(file) {
       write.csv(final_data(), file, row.names = FALSE)
     }
   )
+
+  # Download CPI csv file
+
+  output$cpi_download_csv <- downloadHandler(
+    filename = function() paste0("CPI_sdmx_data_", Sys.Date(), ".csv"),
+    content  = function(file) {
+      write.csv(final_data(), file, row.names = FALSE)
+    }
+  )
+
 }
 
 shinyApp(ui, server)
