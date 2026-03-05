@@ -335,7 +335,7 @@ server <- function(input, output, session) {
     final_df[is.na(final_df)] <- ""
 
     final_df <- final_df |>
-      mutate(OBS_VALUE = round(as.numeric(OBS_VALUE), 2)) |>
+      mutate(OBS_VALUE = round(as.numeric(OBS_VALUE), 1)) |>
       select(
         DATAFLOW, FREQ, TIME_PERIOD, GEO_PICT, INDICATOR,
         COMMODITY, OBS_VALUE, UNIT_MEASURE, UNIT_MULT, OBS_STATUS,
